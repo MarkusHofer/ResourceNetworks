@@ -1,0 +1,25 @@
+# Ignore .DS_Store (macOS metadata files)
+.DS_Store
+
+# Ignore all files with the .bin extension
+*.bin
+
+# Additional common ignores (optional)
+# Ignore log files
+*.log
+
+# Ignore temporary or backup files
+*.tmp
+*.bak
+*~
+
+# Ignore Python bytecode files
+*.pyc
+__pycache__/
+
+# Ignore Julia compilation cache files
+.julia/
+
+# Ignore databse files
+*.sqlite
+*.db

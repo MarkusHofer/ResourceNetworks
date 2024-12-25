@@ -23,3 +23,6 @@ __pycache__/
 # Ignore databse files
 *.sqlite
 *.db
+
+# Ignore dev folder
+dev/

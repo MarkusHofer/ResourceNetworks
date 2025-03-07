@@ -18,7 +18,7 @@
    ```
 
 5. **Run the Scripts**: After installing the dependencies, you can run the scripts e.g.
-   ```bash
+   ```julia
   julia scripts/basic_example.jl
    ```
 

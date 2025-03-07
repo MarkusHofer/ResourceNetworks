@@ -4,6 +4,9 @@
     The networks are stored in the `mason_watts_graphs` folder.
 """
 
+using Pkg
+Pkg.activate(".")
+
 using Revise
 
 includet("../src/CustomGraphs.jl")
@@ -13,10 +16,10 @@ includet("../src/Metrics.jl")
 using .ResourceNetworks
 using .CustomGraphs
 using .Metrics
+
 using Statistics, ProgressMeter
 using UnPack
 using DataFrames
-using PrettyTables
 
 # Network names in order
 networks = [

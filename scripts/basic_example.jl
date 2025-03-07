@@ -5,6 +5,9 @@
     between the counted resources and the estimates based on the disbtributed HyperLogLog algorithm.
 """
 
+using Pkg
+Pkg.activate(".")
+
 using Revise
 
 using Graphs
@@ -43,5 +46,4 @@ F_R = count_resources_within_R(RN, R);
 
 # Calculate the root mean square error between counted resources and expected energy
 rmse(F_R, RN.E)
-
 

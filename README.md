@@ -9,7 +9,7 @@
 3. **Activate the Project Environment**: Open the Julia REPL, navigate to the project directory, and activate the environment:
    ```julia
    using Pkg
-   Pkg.activate("path/to/your/project")
+   Pkg.activate(".")
    ```
 
 4. **Install Dependencies**: Run the following command to install all required packages listed in `Project.toml`:

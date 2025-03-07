@@ -1,0 +1,20 @@
+# Title: max_max_betweenness
+# Number of nodes: 16
+# Each line contains space-separated neighbor indices for that node
+
+1 2 3
+0 2 3
+0 1 4
+0 1 4
+2 3 10
+6 9 10
+5 7 8
+6 8 9
+6 7 9
+5 7 8
+4 5 11
+10 12 15
+11 13 14
+12 14 15
+12 13 15
+11 13 14

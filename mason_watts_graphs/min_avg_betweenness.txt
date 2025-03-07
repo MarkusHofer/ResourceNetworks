@@ -1,0 +1,20 @@
+# Title: min_avg_betweenness
+# Number of nodes: 16
+# Each line contains space-separated neighbor indices for that node
+
+1 4 15
+0 2 7
+1 3 6
+2 4 9
+0 3 5
+4 6 14
+2 5 10
+1 8 13
+7 9 10
+3 8 11
+6 8 12
+9 12 13
+10 11 15
+7 11 14
+5 13 15
+0 12 14

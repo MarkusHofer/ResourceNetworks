@@ -1,0 +1,20 @@
+# Title: max_max_closeness
+# Number of nodes: 16
+# Each line contains space-separated neighbor indices for that node
+
+4 5 15
+2 4 7
+1 3 6
+2 7 8
+0 1 15
+0 6 14
+2 5 11
+1 3 9
+3 10 13
+7 10 12
+8 9 11
+6 10 13
+9 13 14
+8 11 12
+5 12 15
+0 4 14

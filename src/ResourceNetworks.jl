@@ -10,17 +10,32 @@ module ResourceNetworks
 
     export ResourceNetwork, gen_ResourceNetwork, propagate_w!, calculate_E!, count_resources_within_R, propagate_E!
 
+
     mutable struct ResourceNetwork
-        graph::SimpleGraph
-        has_resource::Vector{Bool}
-        m::Int64
-        l::Int64
-        w::Matrix{Int}
-        E::Vector{Float64}
-        has_marker::Vector{Bool}
-        N::Int64
+        graph::SimpleGraph # The graph on which the resource network is defined
+        has_resource::Vector{Bool} # Whether each node has a resource
+        m::Int64 # Number of bits per message
+        l::Int64 # Message length
+        w::Matrix{Int} # The resource network matrix
+        E::Vector{Float64} # The estimated resource count for each node
+        has_marker::Vector{Bool} # Whether each node has a marker
+        N::Int64 # Number of nodes in the graph
     end
 
+    """
+        gen_ResourceNetwork(G::SimpleGraph, has_resource::Vector{Bool}, m::Int64, l::Int64)
+
+    Generate a resource network on a given graph.
+
+    # Arguments
+    - `G::SimpleGraph`: The graph on which the resource network is defined
+    - `has_resource::Vector{Bool}`: Whether each node has a resource
+    - `m::Int64`: Number of bits per message
+    - `l::Int64`: Message length
+
+    # Returns   
+    - `rn::ResourceNetwork`: The resource network
+    """
     function gen_ResourceNetwork(G::SimpleGraph, has_resource::Vector{Bool}, m::Int64, l::Int64)
         N = nv(G)  # Number of nodes
         m_l = m ÷ l
@@ -49,6 +64,16 @@ module ResourceNetworks
         return ResourceNetwork(G, has_resource, m, l, w, E, has_marker, N)
     end
 
+
+    """
+        propagate_w!(rn::ResourceNetwork, R::Int)
+
+    Propagate the messages w in the resource network for a given number of rounds.
+
+    # Arguments
+    - `rn::ResourceNetwork`: The resource network
+    - `R::Int`: The number of rounds to propagate the messages
+    """
     function propagate_w!(rn::ResourceNetwork, R::Int)
         G = rn.graph
         for _ in 1:R
@@ -64,6 +89,15 @@ module ResourceNetworks
         end
     end
 
+    """
+        calculate_E!(rn::ResourceNetwork)
+
+    Calculate the estimated resource count for each node.
+    Based on https://dmtcs.episciences.org/3545/pdf. 
+
+    # Arguments
+    - `rn::ResourceNetwork`: The resource network
+    """
     function calculate_E!(rn::ResourceNetwork)
         m_l = rn.m ÷ rn.l  
         α = alpha(m_l)  # Compute the alpha constant for m/l
@@ -98,6 +132,14 @@ module ResourceNetworks
             end 
         end;
 
+        """
+            propagate_E!(rn::ResourceNetwork; M::Int = rn.N)
+
+        Nodes send the estimated resource count for each node for a given number of rounds.
+
+        # Arguments
+        - `rn::ResourceNetwork`: The resource network
+        """
         function propagate_E!(rn::ResourceNetwork; M::Int = rn.N)
             G = rn.graph
             for _ in 1:M
@@ -127,6 +169,14 @@ module ResourceNetworks
         return nothing
     end
 
+    """
+        count_resources_within_R(rn::ResourceNetwork, R::Int)::Vector{Int}
+
+    Count the number of resources within a given range R using a breadth-first search.
+
+    # Arguments
+    - `rn::ResourceNetwork`: The resource network
+    """  
     function count_resources_within_R(rn::ResourceNetwork, R::Int)::Vector{Int}
         G = rn.graph
         has_resource = rn.has_resource
@@ -140,7 +190,7 @@ module ResourceNetworks
             count = has_resource[start] ? 1 : 0
             dist = 0
 
-            while dist < R && !isempty(frontier)
+            while dist <= R && !isempty(frontier)
                 new_frontier = Int[]
                 for u in frontier
                     for v in neighbors(G, u)
@@ -161,9 +211,7 @@ module ResourceNetworks
 
         return resource_counts
     end
-
-    ## numeric integration of alpha + caching
-    # Path to the cache file
+    
     const ALPHA_CACHE_FILE = "alpha_cache.bin"
 
     # Load existing cache or create a new empty one
@@ -175,10 +223,20 @@ module ResourceNetworks
         end
     end
 
+    # Save the alpha cache to a file
     function save_alpha_cache(cache::Dict{Int,Float64})
         serialize(ALPHA_CACHE_FILE, cache)
     end
 
+    """
+        alpha(gamma::Int)
+
+    Use numeric integration to calculate alpha for a given gamma.
+    Cached values are stored in the file `alpha_cache.bin`.
+
+    # Arguments
+    - `gamma::Int`: The gamma value
+    """
     function alpha(gamma::Int)
         @assert gamma > 0 "gamma must be positive"
         # Load or initialize cache
@@ -199,5 +257,4 @@ module ResourceNetworks
             return α
         end
     end
-    
-end # module
+end

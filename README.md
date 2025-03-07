@@ -17,8 +17,8 @@
    Pkg.instantiate()
    ```
 
-5. **Run the Scripts**: After installing the dependencies, you can run the script using:
-   ```
+5. **Run the Scripts**: After installing the dependencies, you can run the scripts e.g.
+   ```bash
   julia scripts/basic_example.jl
    ```
 

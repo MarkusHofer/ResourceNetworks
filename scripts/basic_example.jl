@@ -30,20 +30,21 @@ G = Graphs.SimpleGraphs.grid((100, 100), periodic=true);
 has_resource = [rand() < 0.5 for _ in 1:nv(G)];
 
 # Set parameters for the resource network
-l = 5;  # Message Length 
-m = l * 128;  # bits per message 
-R = 4;  # Range for resource counting
+l = 5;  # register Length 
+m = l * 64;  # message length
+R = 2;  # range for resource gathering 
 
 # Generate the resource network 
 RN = gen_ResourceNetwork(G, has_resource, m, l);
 
 # Propagate weights and calculate estimates
 propagate_w!(RN, R);
-calculate_E!(RN);   
+calculate_E!(RN);
 
 # Count resources within the specified range R (BFS)
-F_R = count_resources_within_R(RN, R);
+F_R = count_resources_within_R(RN, R); 
 
-# Calculate the root mean square error between counted resources and expected energy
-rmse(F_R, RN.E)
+for i in 1:10 
+    println(F_R[i] ,"      ",   round(RN.E[i],digits = 1))
+end
 

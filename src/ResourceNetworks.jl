@@ -185,26 +185,31 @@ module ResourceNetworks
 
         for start in 1:N
             visited = falses(N)
+            distances = fill(typemax(Int), N)
+            
+            # Initialize start node
             visited[start] = true
-            frontier = [start]
+            distances[start] = 0
+            queue = [start]  # Just store nodes, distance tracked in distances array
             count = has_resource[start] ? 1 : 0
-            dist = 0
-
-            while dist <= R && !isempty(frontier)
-                new_frontier = Int[]
-                for u in frontier
-                    for v in neighbors(G, u)
-                        if !visited[v]
-                            visited[v] = true
-                            if has_resource[v]
-                                count += 1
-                            end
-                            push!(new_frontier, v)
+            
+            # BFS with distance tracking
+            while !isempty(queue)
+                current = popfirst!(queue)
+                current_dist = distances[current]
+                
+                # Explore neighbors
+                for neighbor in neighbors(G, current)
+                    # Only process unvisited nodes within range
+                    if !visited[neighbor] && current_dist + 1 <= R
+                        visited[neighbor] = true
+                        distances[neighbor] = current_dist + 1
+                        if has_resource[neighbor]
+                            count += 1
                         end
+                        push!(queue, neighbor)
                     end
                 end
-                frontier = new_frontier
-                dist += 1
             end
             resource_counts[start] = count
         end
